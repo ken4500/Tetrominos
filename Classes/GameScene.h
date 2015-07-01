@@ -11,7 +11,7 @@
 
 #include "cocos2d.h"
 
-class GameScene : public cocos2d::Scene
+class GameScene : public cocos2d::Node
 {
 public:
     CREATE_FUNC(GameScene);

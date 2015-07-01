@@ -14,6 +14,11 @@
 class SceneManager {
 public:
     static SceneManager* getInstance();
+    void enterGameScene(bool networked);
+    
+private:
+    SceneManager();
+    ~SceneManager();
 };
 
 #endif /* defined(__Tetrominos__SceneManager__) */
