@@ -10,6 +10,7 @@
 #define __Tetrominos__Grid__
 
 #include "cocos2d.h"
+#include "Coordinate.h"
 
 class Grid : public cocos2d::Sprite {
 public:

@@ -21,7 +21,7 @@ enum class TetrominoType
     Z = 4,
     J = 5,
     L = 6
-}
+};
 
 
 
