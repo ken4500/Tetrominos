@@ -15,6 +15,7 @@ class SceneManager {
 public:
     static SceneManager* getInstance();
     void enterGameScene(bool networked);
+    void backLobbyScene();
     
 private:
     SceneManager();
