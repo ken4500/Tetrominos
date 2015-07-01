@@ -52,20 +52,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     if (targetSize.height < 481.0f)
     {
-        searchResolutionOrder[0] = "resouce-1x";
+        searchResolutionOrder[0] = "resources-1x";
     }
     else if (targetSize.height < 1335.0f)
     {
-        searchResolutionOrder[0] = "resouce-2x";
+        searchResolutionOrder[0] = "resources-2x";
     }
     else if (targetSize.height < 1921.0f)
     {
-        searchResolutionOrder[0] = "resouce-3x";
+        searchResolutionOrder[0] = "resources-3x";
     }
     else
     {
         searchResolutionOrder[0] = "resources-4x";
     }
+
+    FileUtils::getInstance()->setSearchResolutionsOrder(searchResolutionOrder);
 
     register_all_packages();
 
