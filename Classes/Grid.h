@@ -10,6 +10,7 @@
 #define __Tetrominos__Grid__
 
 #include "cocos2d.h"
+#include "Coordinate.h"
 class Tetromino;
 
 class Grid : public cocos2d::Sprite {
@@ -17,12 +18,18 @@ public:
     CREATE_FUNC(Grid);
     void rotateActiveTetromino();
     void spawnTetromino(Tetromino* tetromino);
+    void step();
+    
+    void setActiveTetrominoCoordinate(Coordinate coordinate);
+    Coordinate getActiveTetrominoCoordinate();
 
 protected:
-    Tetromino* activeTetrimino;
+    Tetromino* activeTetromino;
+    Coordinate activeTetrominoCoordinate;
 
     bool init() override;
     void onEnter() override;
+    cocos2d::Vec2 convertCoordinateToPosition(Coordinate coordinate);
 };
 
 #endif /* defined(__Tetrominos__Grid__) */

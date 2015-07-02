@@ -23,12 +23,15 @@ public:
 protected:
     Grid* grid;
     std::unique_ptr<TetrominoBag> tetrominoBag;
+    bool active;
 
     bool init() override;
     void onEnter() override;
-    void backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType);
     void setupTouchHandler();
+    void setGameActive(bool active);
     Tetromino* createRandomTetromino();
+    void step(float dt);
+    void backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType);
     
 };
 

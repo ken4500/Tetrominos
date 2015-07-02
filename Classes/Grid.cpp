@@ -18,7 +18,8 @@ bool Grid::init() {
         return false;
     }
     
-    this->activeTetrimino = nullptr;
+    this->activeTetromino = nullptr;
+    this->activeTetrominoCoordinate = Coordinate();
 
     return true;
 }
@@ -33,8 +34,8 @@ void Grid::onEnter()
 
 void Grid::rotateActiveTetromino()
 {
-    if (this->activeTetrimino) {
-        this->activeTetrimino->rotate(false);
+    if (this->activeTetromino) {
+        this->activeTetromino->rotate(false);
     }
     
     // TODO: check collision
@@ -42,8 +43,48 @@ void Grid::rotateActiveTetromino()
 
 void Grid::spawnTetromino(Tetromino* tetromino)
 {
-    this->activeTetrimino = tetromino;
-    this->addChild(this->activeTetrimino);
+    this->activeTetromino = tetromino;
+    this->addChild(this->activeTetromino);
     
     // TODO: Place tetromino in correct position in grid
+    this->activeTetromino->setAnchorPoint(Vec2(0.0f, 0.0f));
+    
+    int hightestY = activeTetromino->getHighestYcoodinate();
+    int width = activeTetromino->getWidhtInBlocks();
+    
+    this->setActiveTetrominoCoordinate(Coordinate(GRID_WIDTH / 2 - width / 2 - 1, GRID_HEIGHT - hightestY - 1));
+}
+
+void Grid::step()
+{
+    Coordinate activeCoordinate = this->getActiveTetrominoCoordinate();
+    Coordinate nextCoordinate = Coordinate(activeCoordinate.x, activeCoordinate.y - 1);
+    this->setActiveTetrominoCoordinate(nextCoordinate);
+}
+
+#pragma mark - Setter/ Getters
+
+void Grid::setActiveTetrominoCoordinate(Coordinate coordinate)
+{
+    if (this->activeTetromino) {
+        this->activeTetrominoCoordinate = coordinate;
+        Vec2 position = this->convertCoordinateToPosition(coordinate);
+        this->activeTetromino->setPosition(position);
+    }
+}
+
+Coordinate Grid::getActiveTetrominoCoordinate()
+{
+    return this->activeTetrominoCoordinate;
+}
+
+#pragma mark - protected method
+
+Vec2 Grid::convertCoordinateToPosition(Coordinate coordinate)
+{
+    Size size = this->getContentSize();
+    float width = size.width / float(GRID_WIDTH);
+    float height = size.height / float(GRID_HEIGHT);
+    
+    return Vec2(coordinate.x * width, coordinate.y * height);
 }

@@ -11,6 +11,7 @@
 
 static const int GRID_WIDTH = 10;
 static const int GRID_HEIGHT = 20;
+static const float INITIAL_STEP_INTERVAL = 1.0f;
 
 enum class TetrominoType
 {
