@@ -13,9 +13,11 @@
 
 USING_NS_CC;
 
+#pragma mark - View lifecycle
+
 Tetromino* Tetromino::createWithType(TetrominoType type)
 {
-    auto *tetromino = new(std::nothrow) Tetromino();
+    Tetromino* tetromino = new(std::nothrow) Tetromino();
     if (tetromino && tetromino->initWithType(type))
     {
         tetromino->autorelease();
@@ -39,14 +41,15 @@ bool Tetromino::initWithType(TetrominoType type)
     auto state = JSONPacker::unpackTetrominoJSON(jsonStr, type);
     this->rotations = state.rotations;
     this->color = state.color;
+    this->rotationIndex = 0;
 
-    this->blocks = std::vector<Sprite*>(4);
+    this->blocks = std::vector<Sprite*>();
+    this->blocks.reserve(4);
     Sprite* dummyBlack = Sprite::create("block.png");
     Size dummySize = dummyBlack->getContentSize();
     this->setContentSize(Size(dummySize.width * float(GRID_SIZE), dummySize.height * float(GRID_SIZE)));
-    
-    auto coordinates = rotations[0];
-    
+
+    auto coordinates = rotations[this->rotationIndex];
     for (Coordinate coordinate : coordinates) {
         auto block = Sprite::create("block.png");
         block->setColor(this->color);
@@ -55,11 +58,11 @@ bool Tetromino::initWithType(TetrominoType type)
         this->addChild(block);
         this->blocks.push_back(block);
     }
+    this->rotationIndex = 0;
     
     return true;
 }
 
-#pragma mark - View lifecycle
 
 void Tetromino::onEnter()
 {
@@ -69,4 +72,24 @@ void Tetromino::onEnter()
 void Tetromino::onExit()
 {
     Node::onExit();
+}
+
+#pragma mark - public method
+
+void Tetromino::rotate(bool right)
+{
+    this->rotationIndex += (right) ? 1 : -1;
+    if (this->rotationIndex >= (int) this->rotations.size()) {
+        this->rotationIndex = 0;
+    } else if (rotationIndex < 0) {
+        this->rotationIndex = (int) this->rotations.size() - 1;
+    }
+    
+    auto coordinates = this->rotations[this->rotationIndex];
+    for (int i = 0; i < coordinates.size(); i++) {
+        auto block = this->blocks[i];
+        auto coordinate = coordinates[i];
+        auto blockSize = block->getContentSize();
+        block->setPosition(Vec2(blockSize.width * coordinate.x, blockSize.height * coordinate.y));
+    }
 }

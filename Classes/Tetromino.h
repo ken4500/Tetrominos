@@ -17,8 +17,10 @@ class Tetromino : public cocos2d::Node
 {
 public:
     static Tetromino* createWithType(TetrominoType type);
+    void rotate(bool right);
 
 private:
+    int rotationIndex;
     TetrominoType type;
     std::vector<std::vector<Coordinate>> rotations;
     cocos2d::Color3B color;

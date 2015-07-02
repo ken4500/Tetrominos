@@ -12,6 +12,8 @@
 
 using namespace cocos2d;
 
+#pragma mark - lifecycle
+
 bool GameScene::init()
 {
     if (! Node::init()) {
@@ -41,11 +43,36 @@ void GameScene::onEnter()
     this->grid = Grid::create();
     this->grid->setAnchorPoint(Vec2(0.5f, 0.0f));
     this->grid->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.0f));
-    
     this->addChild(this->grid);
+    
+    this->setupTouchHandler();
 }
+
+void GameScene::setupTouchHandler()
+{
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = [&](Touch* touch, Event* event)
+    {
+        return true;
+    };
+    
+    touchListener->onTouchEnded = [&](Touch* touch, Event* event)
+    {
+        this->grid->rotateActiveTetromino();
+    };
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
+}
+
+#pragma mark - public method
+
+#pragma mark - protected method
+
+#pragma mark - UI method
 
 void GameScene::backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType)
 {
     SceneManager::getInstance()->backLobbyScene();
 }
+
+
+
