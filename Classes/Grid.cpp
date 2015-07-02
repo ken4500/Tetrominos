@@ -15,6 +15,9 @@ bool Grid::init() {
     if (!Sprite::initWithFile("grid.png")) {
         return false;
     }
+
+    auto test = Tetromino::createWithType(TetrominoType::T);
+    addChild(test);
     
     return true;
 }
