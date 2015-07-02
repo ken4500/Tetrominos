@@ -7,6 +7,7 @@
 //
 
 #include "Grid.h"
+#include "Tetromino.h"
 
 using namespace cocos2d;
 
@@ -14,6 +15,6 @@ bool Grid::init() {
     if (!Sprite::initWithFile("grid.png")) {
         return false;
     }
-
+    
     return true;
 }

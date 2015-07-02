@@ -31,13 +31,11 @@ void GameScene::onEnter()
     // back button
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto backButton = ui::Button::create();
-    int hoge = backButton->getReferenceCount();
     backButton->loadTextures("backButton.png", "backButtonPressed.png");
     backButton->setAnchorPoint(Vec2(0.0f, 1.0f));
     backButton->setPosition(Vec2(10, visibleSize.height - 10));
     backButton->addTouchEventListener(CC_CALLBACK_2(GameScene::backButtonPressed, this));
     this->addChild(backButton);
-    int fuga = backButton->getReferenceCount();
     
     // grid
     this->grid = Grid::create();

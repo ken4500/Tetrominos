@@ -19,11 +19,6 @@ namespace JSONPacker {
         rapidjson::Document document;
         document.Parse<0>(json.c_str());
         
-        rapidjson::Value& colorDoc = document["color"];
-        int r = colorDoc["r"].GetInt();
-        int g = colorDoc["g"].GetInt();
-        int b = colorDoc["b"].GetInt();
-        
         const char* typeStr;
         switch (type) {
             case TetrominoType::T: typeStr = "T"; break;
@@ -35,7 +30,37 @@ namespace JSONPacker {
             case TetrominoType::L: typeStr = "L"; break;
         }
         
+        TetrominoState rtnValue;
+
+        // Get color
         rapidjson::Value& tetrominoDoc = document[typeStr];
+        rapidjson::Value& colorDoc = tetrominoDoc["color"];
+        int r = colorDoc["r"].GetInt();
+        int g = colorDoc["g"].GetInt();
+        int b = colorDoc["b"].GetInt();
+        Color3B color = Color3B(r, g, b);
+
+        // Get rotations
+        std::vector<std::vector<Coordinate>> rotations;
+        rapidjson::Value& rotationsDoc = tetrominoDoc["rotations"];
+        for (int i = 0; i < rotationsDoc.Size(); i++) {
+            rapidjson::Value& rotaionDoc = rotationsDoc[i];
+            std::vector<Coordinate> rotation;
+            for (int j = 0; j < rotaionDoc.Size(); j++) {
+                rapidjson::Value& dot = rotaionDoc[j];
+                int x = dot["x"].GetInt();
+                int y = dot["y"].GetInt();
+                rotation.push_back(Coordinate(x, y));
+            }
+            rotations.push_back(rotation);
+        }
+
+        // Make tetrominoState
+        TetrominoState state;
+        state.color = color;
+        state.rotations = rotations;
+
+        return state;
     }
     
     std::string packTetrominoJSON(TetrominoState tetrominoState)
