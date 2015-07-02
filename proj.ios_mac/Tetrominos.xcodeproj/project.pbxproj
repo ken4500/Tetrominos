@@ -60,6 +60,7 @@
 		9F425AD61B44A8EF001B2969 /* Tetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AD41B44A8EF001B2969 /* Tetromino.cpp */; };
 		9F425AD91B44AFD6001B2969 /* Coordinate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AD71B44AFD6001B2969 /* Coordinate.cpp */; };
 		9F425ADF1B44B470001B2969 /* JSONPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ADD1B44B470001B2969 /* JSONPacker.cpp */; };
+		9F425AE31B45DCA5001B2969 /* TetrominoBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AE11B45DCA5001B2969 /* TetrominoBag.cpp */; };
 		9FFC9E841B447DE400869B23 /* Lobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFC9E821B447DE400869B23 /* Lobby.cpp */; };
 		9FFC9E851B447DE400869B23 /* Lobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFC9E821B447DE400869B23 /* Lobby.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
@@ -164,6 +165,8 @@
 		9F425AD81B44AFD6001B2969 /* Coordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Coordinate.h; sourceTree = "<group>"; };
 		9F425ADD1B44B470001B2969 /* JSONPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONPacker.cpp; sourceTree = "<group>"; };
 		9F425ADE1B44B470001B2969 /* JSONPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONPacker.h; sourceTree = "<group>"; };
+		9F425AE11B45DCA5001B2969 /* TetrominoBag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TetrominoBag.cpp; sourceTree = "<group>"; };
+		9F425AE21B45DCA5001B2969 /* TetrominoBag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TetrominoBag.h; sourceTree = "<group>"; };
 		9FFC9E821B447DE400869B23 /* Lobby.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lobby.cpp; sourceTree = "<group>"; };
 		9FFC9E831B447DE400869B23 /* Lobby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lobby.h; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -319,6 +322,8 @@
 				9F425AD81B44AFD6001B2969 /* Coordinate.h */,
 				9F425ADD1B44B470001B2969 /* JSONPacker.cpp */,
 				9F425ADE1B44B470001B2969 /* JSONPacker.h */,
+				9F425AE11B45DCA5001B2969 /* TetrominoBag.cpp */,
+				9F425AE21B45DCA5001B2969 /* TetrominoBag.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -520,6 +525,7 @@
 				9F425ACA1B448611001B2969 /* GameScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				9F425AD91B44AFD6001B2969 /* Coordinate.cpp in Sources */,
+				9F425AE31B45DCA5001B2969 /* TetrominoBag.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				9F425AD61B44A8EF001B2969 /* Tetromino.cpp in Sources */,
 				9F425ADF1B44B470001B2969 /* JSONPacker.cpp in Sources */,

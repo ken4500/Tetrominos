@@ -27,8 +27,6 @@ void Grid::onEnter()
 {
     Sprite::onEnter();
 
-    this->activeTetrimino = Tetromino::createWithType(TetrominoType::T);
-    addChild(this->activeTetrimino);
 }
 
 #pragma mark - public method
@@ -40,4 +38,10 @@ void Grid::rotateActiveTetromino()
     }
     
     // TODO: check collision
+}
+
+void Grid::spawnTetromino(Tetromino* tetromino)
+{
+    this->activeTetrimino = tetromino;
+    this->addChild(this->activeTetrimino);
 }

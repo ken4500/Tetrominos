@@ -9,6 +9,7 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 #include "Grid.h"
+#include "Tetromino.h"
 
 using namespace cocos2d;
 
@@ -22,6 +23,9 @@ bool GameScene::init()
     
     LayerColor* background = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(background);
+    
+    this->tetrominoBag = std::unique_ptr<TetrominoBag>(new TetrominoBag());
+
 
     return true;
 }
@@ -45,6 +49,10 @@ void GameScene::onEnter()
     this->grid->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.0f));
     this->addChild(this->grid);
     
+    // make random tetromino
+    Tetromino* randomTest = this->createRandomTetromino();
+    this->grid->spawnTetromino(randomTest);
+    
     this->setupTouchHandler();
 }
 
@@ -66,6 +74,12 @@ void GameScene::setupTouchHandler()
 #pragma mark - public method
 
 #pragma mark - protected method
+
+Tetromino* GameScene::createRandomTetromino()
+{
+    auto type = this->tetrominoBag->getTetromino();
+    return Tetromino::createWithType(type);
+}
 
 #pragma mark - UI method
 
