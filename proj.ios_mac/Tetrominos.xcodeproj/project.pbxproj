@@ -59,7 +59,7 @@
 		9F425AD01B44A4A1001B2969 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ACE1B44A4A1001B2969 /* Grid.cpp */; };
 		9F425AD61B44A8EF001B2969 /* Tetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AD41B44A8EF001B2969 /* Tetromino.cpp */; };
 		9F425AD91B44AFD6001B2969 /* Coordinate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AD71B44AFD6001B2969 /* Coordinate.cpp */; };
-		9F425ADC1B44B3F4001B2969 /* JsonPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ADA1B44B3F4001B2969 /* JsonPacker.cpp */; };
+		9F425ADF1B44B470001B2969 /* JSONPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ADD1B44B470001B2969 /* JSONPacker.cpp */; };
 		9FFC9E841B447DE400869B23 /* Lobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFC9E821B447DE400869B23 /* Lobby.cpp */; };
 		9FFC9E851B447DE400869B23 /* Lobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFC9E821B447DE400869B23 /* Lobby.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
@@ -162,8 +162,8 @@
 		9F425AD51B44A8EF001B2969 /* Tetromino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tetromino.h; sourceTree = "<group>"; };
 		9F425AD71B44AFD6001B2969 /* Coordinate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Coordinate.cpp; sourceTree = "<group>"; };
 		9F425AD81B44AFD6001B2969 /* Coordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Coordinate.h; sourceTree = "<group>"; };
-		9F425ADA1B44B3F4001B2969 /* JsonPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonPacker.cpp; sourceTree = "<group>"; };
-		9F425ADB1B44B3F4001B2969 /* JsonPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonPacker.h; sourceTree = "<group>"; };
+		9F425ADD1B44B470001B2969 /* JSONPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONPacker.cpp; sourceTree = "<group>"; };
+		9F425ADE1B44B470001B2969 /* JSONPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONPacker.h; sourceTree = "<group>"; };
 		9FFC9E821B447DE400869B23 /* Lobby.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lobby.cpp; sourceTree = "<group>"; };
 		9FFC9E831B447DE400869B23 /* Lobby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lobby.h; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -317,8 +317,8 @@
 				9F425AD51B44A8EF001B2969 /* Tetromino.h */,
 				9F425AD71B44AFD6001B2969 /* Coordinate.cpp */,
 				9F425AD81B44AFD6001B2969 /* Coordinate.h */,
-				9F425ADA1B44B3F4001B2969 /* JsonPacker.cpp */,
-				9F425ADB1B44B3F4001B2969 /* JsonPacker.h */,
+				9F425ADD1B44B470001B2969 /* JSONPacker.cpp */,
+				9F425ADE1B44B470001B2969 /* JSONPacker.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -514,7 +514,6 @@
 				9F425AD01B44A4A1001B2969 /* Grid.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
-				9F425ADC1B44B3F4001B2969 /* JsonPacker.cpp in Sources */,
 				9F425ACD1B4498E6001B2969 /* SceneManager.cpp in Sources */,
 				9FFC9E841B447DE400869B23 /* Lobby.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
@@ -523,6 +522,7 @@
 				9F425AD91B44AFD6001B2969 /* Coordinate.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				9F425AD61B44A8EF001B2969 /* Tetromino.cpp in Sources */,
+				9F425ADF1B44B470001B2969 /* JSONPacker.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
