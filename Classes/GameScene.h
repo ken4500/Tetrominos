@@ -14,6 +14,7 @@
 #include "TetrominoBag.h"
 class Grid;
 class Tetromino;
+class Coordinate;
 
 class GameScene : public cocos2d::Node
 {
@@ -32,6 +33,8 @@ protected:
     Tetromino* createRandomTetromino();
     void step(float dt);
     void backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType);
+    Coordinate convertPositionToCoordinate(cocos2d::Vec2 position);
+
     
 };
 

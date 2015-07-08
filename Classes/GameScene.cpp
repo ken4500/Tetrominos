@@ -60,14 +60,48 @@ void GameScene::onEnter()
 void GameScene::setupTouchHandler()
 {
     auto touchListener = EventListenerTouchOneByOne::create();
+    static Vec2 firstTouchPos;
+    static Vec2 lastTouchPos;
+    static bool allowRotate;
+
     touchListener->onTouchBegan = [&](Touch* touch, Event* event)
     {
+        firstTouchPos = this->convertTouchToNodeSpace(touch);
+        lastTouchPos = this->convertTouchToNodeSpace(touch);
+        allowRotate = true;
         return true;
+    };
+    
+    touchListener->onTouchMoved = [&](Touch* touch, Event* event)
+    {
+        Vec2 touchPos = this->convertTouchToNodeSpace(touch);
+        Vec2 difference = touchPos - lastTouchPos;
+        Tetromino* activeTetromino = this->grid->getActiveTetromino();
+        Coordinate newTetrominoCoordinate;
+        
+        if (activeTetromino) {
+            Coordinate differenseCoordinate = this->convertPositionToCoordinate(difference);
+            Coordinate activeTetrominoCoordinate = grid->getActiveTetrominoCoordinate();
+            
+            if (std::abs(differenseCoordinate.x) >= 1) {
+                bool movingRight = (differenseCoordinate.x > 0);
+                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + ((movingRight) ? 1 : -1), activeTetrominoCoordinate.y);
+                this->grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
+                lastTouchPos = touchPos;
+                allowRotate = false;
+            }
+        }
     };
     
     touchListener->onTouchEnded = [&](Touch* touch, Event* event)
     {
-        this->grid->rotateActiveTetromino();
+        Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
+
+        float distance = touchEndPos.distance(firstTouchPos);
+
+        if (distance < 40.0f && allowRotate) {
+            this->grid->rotateActiveTetromino();
+        }
     };
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
@@ -104,5 +138,11 @@ void GameScene::backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::To
     SceneManager::getInstance()->backLobbyScene();
 }
 
+#pragma mark - Utility 
+Coordinate GameScene::convertPositionToCoordinate(cocos2d::Vec2 position)
+{
+    Size size = this->grid->getBlockSize();
+    return Coordinate((int)(position.x / size.width), (int)(position.y / size.height));
+}
 
 
