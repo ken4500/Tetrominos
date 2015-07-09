@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "CocosGUI.h"
 #include "TetrominoBag.h"
+#include <time.h>
 class Grid;
 class Tetromino;
 class Coordinate;

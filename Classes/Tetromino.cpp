@@ -115,3 +115,31 @@ int Tetromino::getWidhtInBlocks()
     }
     return maxX - minX + 1;
 }
+
+int Tetromino::getMinimumXCoordinate()
+{
+    int minX = GRID_SIZE;
+    auto coordinates = this->rotations[this->rotationIndex];
+    for (auto p : coordinates) {
+        minX = MIN(p.x, minX);
+    }
+    return minX;
+}
+
+std::vector<int> Tetromino::getSkirt()
+{
+    std::vector<int> rtn;
+    auto coordinates = this->rotations[this->rotationIndex];
+    for (int x = 0; x < GRID_SIZE; x++) {
+        int min = GRID_SIZE;
+        for (auto p : coordinates) {
+            if (p.x == x && p.y < min) {
+                min = p.y;
+            }
+        }
+        if (min != GRID_SIZE) {
+            rtn.push_back(min);
+        }
+    }
+    return rtn;
+}

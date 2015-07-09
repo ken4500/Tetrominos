@@ -21,6 +21,8 @@ public:
 
     int getHighestYcoodinate();
     int getWidhtInBlocks();
+    int getMinimumXCoordinate();
+    std::vector<int> getSkirt();
 
 private:
     int rotationIndex;

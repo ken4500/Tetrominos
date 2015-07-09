@@ -12,6 +12,7 @@
 static const int GRID_WIDTH = 10;
 static const int GRID_HEIGHT = 20;
 static const float INITIAL_STEP_INTERVAL = 1.0f;
+static const float DROP_VELOCITY = 6000.0f;
 
 enum class TetrominoType
 {
@@ -23,8 +24,5 @@ enum class TetrominoType
     J = 5,
     L = 6
 };
-
-
-
 
 #endif

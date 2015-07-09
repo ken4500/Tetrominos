@@ -63,12 +63,14 @@ void GameScene::setupTouchHandler()
     static Vec2 firstTouchPos;
     static Vec2 lastTouchPos;
     static bool allowRotate;
+    static std::clock_t touchStartedTime;
 
     touchListener->onTouchBegan = [&](Touch* touch, Event* event)
     {
         firstTouchPos = this->convertTouchToNodeSpace(touch);
         lastTouchPos = this->convertTouchToNodeSpace(touch);
         allowRotate = true;
+        touchStartedTime = clock();
         return true;
     };
     
@@ -83,7 +85,11 @@ void GameScene::setupTouchHandler()
             Coordinate differenseCoordinate = this->convertPositionToCoordinate(difference);
             Coordinate activeTetrominoCoordinate = grid->getActiveTetrominoCoordinate();
             
-            if (std::abs(differenseCoordinate.x) >= 1) {
+            if (differenseCoordinate.y <= -1) {
+                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x, activeTetrominoCoordinate.y - 1);
+                grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
+                lastTouchPos = touchPos;
+            } else if (std::abs(differenseCoordinate.x) >= 1) {
                 bool movingRight = (differenseCoordinate.x > 0);
                 newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + ((movingRight) ? 1 : -1), activeTetrominoCoordinate.y);
                 this->grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
@@ -96,11 +102,17 @@ void GameScene::setupTouchHandler()
     touchListener->onTouchEnded = [&](Touch* touch, Event* event)
     {
         Vec2 touchEndPos = this->convertTouchToNodeSpace(touch);
-
         float distance = touchEndPos.distance(firstTouchPos);
-
         if (distance < 40.0f && allowRotate) {
             this->grid->rotateActiveTetromino();
+        } else {
+            Vec2 difference = touchEndPos - firstTouchPos;
+            float touchDuration = (float)(clock() - touchStartedTime) / CLOCKS_PER_SEC;
+            float velocity = fabsf(difference.y / touchDuration);
+            CCLOG("velocity = %f", velocity);
+            if (velocity > DROP_VELOCITY) {
+                
+            }
         }
     };
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
