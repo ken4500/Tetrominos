@@ -12,7 +12,9 @@
 static const int GRID_WIDTH = 10;
 static const int GRID_HEIGHT = 20;
 static const float INITIAL_STEP_INTERVAL = 1.0f;
-static const float DROP_VELOCITY = 6000.0f;
+static const float DROP_VELOCITY = 10000.0f;
+static const int BLOCKS_IN_TETROMINO = 4;
+
 
 enum class TetrominoType
 {

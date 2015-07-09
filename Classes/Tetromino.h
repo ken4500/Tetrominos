@@ -23,6 +23,8 @@ public:
     int getWidhtInBlocks();
     int getMinimumXCoordinate();
     std::vector<int> getSkirt();
+    std::vector<cocos2d::Sprite*> getBlocks();
+    std::vector<Coordinate> getCurrentRotation();
 
 private:
     int rotationIndex;

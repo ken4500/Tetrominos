@@ -143,3 +143,13 @@ std::vector<int> Tetromino::getSkirt()
     }
     return rtn;
 }
+
+std::vector<cocos2d::Sprite*> Tetromino::getBlocks()
+{
+    return this->blocks;
+}
+
+std::vector<Coordinate> Tetromino::getCurrentRotation()
+{
+    return this->rotations[this->rotationIndex];
+}
