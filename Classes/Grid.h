@@ -38,6 +38,8 @@ protected:
     void deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordinate);
     void placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoordinate);
     Coordinate getTetrominoLandingCoordinate();
+    void clearLines();
+    void removeLine(int y);
 };
 
 #endif /* defined(__Tetrominos__Grid__) */

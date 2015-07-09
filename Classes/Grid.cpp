@@ -40,11 +40,10 @@ void Grid::rotateActiveTetromino()
 {
     if (this->activeTetromino) {
         this->activeTetromino->rotate(true);
-    }
-    
-    if (this->checkIfTetrominoCollide(this->activeTetromino, this->activeTetrominoCoordinate)) {
-        this->activeTetromino->rotate(false);
-    }
+        if (this->checkIfTetrominoCollide(this->activeTetromino, this->activeTetrominoCoordinate)) {
+            this->activeTetromino->rotate(false);
+        }
+    }    
 }
 
 void Grid::spawnTetromino(Tetromino* tetromino)
@@ -149,6 +148,7 @@ void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordin
     this->placeTetrominoOnBoard(tetromino, tetrominoCoordinate);
     this->activeTetromino->removeFromParent();
     this->activeTetromino = nullptr;
+    this->clearLines();
 }
 
 void Grid::placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoordinate)
@@ -182,4 +182,40 @@ Coordinate Grid::getTetrominoLandingCoordinate()
         }
     }
     return returnCoordinate;
+}
+
+void Grid::clearLines()
+{
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+        auto line = blocksLanded[y];
+        bool clearLine = true;
+        for (Sprite* s : line) {
+            if (!s) {
+                clearLine = false;
+            }
+        }
+        if (clearLine) {
+            this->removeLine(y);
+            y--;
+        }
+    }
+}
+
+void Grid::removeLine(int removeY)
+{
+    for (int x = 0; x < GRID_WIDTH; x++) {
+        if (this->blocksLanded[removeY][x]) {
+            this->blocksLanded[removeY][x]->removeFromParent();
+            this->blocksLanded[removeY][x] = nullptr;
+        }
+    }
+    for (int y = removeY + 1; y < GRID_HEIGHT; y++) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            auto moveTetromino = this->blocksLanded[y][x];
+            if (moveTetromino) {
+                moveTetromino->setPosition(moveTetromino->getPosition() + Vec2(0, -moveTetromino->getContentSize().height));
+            }
+            this->blocksLanded[y - 1][x] = this->blocksLanded[y][x];
+        }
+    }
 }
