@@ -141,8 +141,6 @@ void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordin
     this->placeTetrominoOnBoard(tetromino, tetrominoCoordinate);
     this->activeTetromino->removeFromParent();
     this->activeTetromino = nullptr;
-    auto hoge = Tetromino::createWithType(TetrominoType::J);
-    this->spawnTetromino(hoge);
 }
 
 void Grid::placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoordinate)
