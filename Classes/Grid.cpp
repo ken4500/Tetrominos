@@ -80,6 +80,14 @@ Tetromino* Grid::getActiveTetromino()
     return this->activeTetromino;
 }
 
+void Grid::dropActiveTetromino()
+{
+    if (this->activeTetromino) {
+        Coordinate landingCoordinate = this->getTetrominoLandingCoordinate();
+        this->setActiveTetrominoCoordinate(landingCoordinate);
+    }
+}
+
 #pragma mark - Setter/ Getters
 
 void Grid::setActiveTetrominoCoordinate(Coordinate coordinate)
@@ -163,3 +171,15 @@ void Grid::placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoord
     }
 }
 
+Coordinate Grid::getTetrominoLandingCoordinate()
+{
+    Coordinate returnCoordinate = this->activeTetrominoCoordinate;
+    while (true) {
+        returnCoordinate.y--;
+        if (checkIfTetrominoCollide(this->activeTetromino, returnCoordinate)) {
+            returnCoordinate.y++;
+            break;
+        }
+    }
+    return returnCoordinate;
+}

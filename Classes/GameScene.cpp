@@ -111,7 +111,8 @@ void GameScene::setupTouchHandler()
             float velocity = fabsf(difference.y / touchDuration);
             CCLOG("velocity = %f", velocity);
             if (velocity > DROP_VELOCITY) {
-                
+                this->grid->dropActiveTetromino();
+                this->step(0);
             }
         }
     };
