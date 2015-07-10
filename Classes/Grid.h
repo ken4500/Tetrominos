@@ -28,6 +28,7 @@ public:
 
 protected:
     Tetromino* activeTetromino;
+    Tetromino* ghostTetromino;
     Coordinate activeTetrominoCoordinate;
     std::vector<std::vector<Sprite*>> blocksLanded;
 
@@ -40,6 +41,7 @@ protected:
     Coordinate getTetrominoLandingCoordinate();
     void clearLines();
     void removeLine(int y);
+    void updateGhostTetrominoPosition();
 };
 
 #endif /* defined(__Tetrominos__Grid__) */

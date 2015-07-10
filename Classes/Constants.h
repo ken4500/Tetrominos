@@ -15,7 +15,6 @@ static const float INITIAL_STEP_INTERVAL = 1.0f;
 static const float DROP_VELOCITY = 10000.0f;
 static const int BLOCKS_IN_TETROMINO = 4;
 
-
 enum class TetrominoType
 {
     I = 0,

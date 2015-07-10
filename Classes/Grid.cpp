@@ -42,6 +42,8 @@ void Grid::rotateActiveTetromino()
         this->activeTetromino->rotate(true);
         if (this->checkIfTetrominoCollide(this->activeTetromino, this->activeTetrominoCoordinate)) {
             this->activeTetromino->rotate(false);
+        } else if (this->ghostTetromino) {
+            this->ghostTetromino->rotate(true);
         }
     }    
 }
@@ -58,6 +60,14 @@ void Grid::spawnTetromino(Tetromino* tetromino)
     int width = activeTetromino->getWidhtInBlocks();
     
     this->setActiveTetrominoCoordinate(Coordinate(GRID_WIDTH / 2 - width / 2 - 1, GRID_HEIGHT - hightestY - 1));
+    
+    // add ghost
+    this->ghostTetromino = Tetromino::createWithType(tetromino->getTetrominoType());
+    this->ghostTetromino->setCascadeOpacityEnabled(true);
+    this->ghostTetromino->setOpacity(70);
+    this->updateGhostTetrominoPosition();
+
+    this->addChild(this->ghostTetromino);
 }
 
 void Grid::step()
@@ -99,6 +109,7 @@ void Grid::setActiveTetrominoCoordinate(Coordinate coordinate)
             this->activeTetromino->setPosition(position);
         }
     }
+    this->updateGhostTetrominoPosition();
 }
 
 Coordinate Grid::getActiveTetrominoCoordinate()
@@ -148,6 +159,8 @@ void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordin
     this->placeTetrominoOnBoard(tetromino, tetrominoCoordinate);
     this->activeTetromino->removeFromParent();
     this->activeTetromino = nullptr;
+    this->ghostTetromino->removeFromParent();
+    this->ghostTetromino = nullptr;
     this->clearLines();
 }
 
@@ -217,5 +230,13 @@ void Grid::removeLine(int removeY)
             }
             this->blocksLanded[y - 1][x] = this->blocksLanded[y][x];
         }
+    }
+}
+
+void Grid::updateGhostTetrominoPosition()
+{
+    if (this->ghostTetromino) {
+        Coordinate landingCoordinate = this->getTetrominoLandingCoordinate();
+        this->ghostTetromino->setPosition(this->convertCoordinateToPosition(landingCoordinate));
     }
 }
