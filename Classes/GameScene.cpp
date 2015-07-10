@@ -27,6 +27,7 @@ bool GameScene::init()
     this->tetrominoBag = std::unique_ptr<TetrominoBag>(new TetrominoBag());
     this->active = false;
     this->totalScore = 0;
+    this->stepInterval = INITIAL_STEP_INTERVAL;
 
     return true;
 }
@@ -146,7 +147,7 @@ Tetromino* GameScene::createRandomTetromino()
 void GameScene::setGameActive(bool active)
 {
     if (active) {
-        this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), INITIAL_STEP_INTERVAL);
+        this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), this->stepInterval);
     } else {
         this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
     
@@ -171,7 +172,20 @@ void GameScene::updateStateFromScore()
     if (newScore > totalScore) {
         this->totalScore = newScore;
         this->updateScoreLabel(newScore);
+        this->updateGameSpeed(newScore);
     }
+    
+}
+
+void GameScene::updateGameSpeed(int score)
+{
+    int stepAcceleration = score / SCORE_TO_ACCELERATE;
+    float intervalDeduction = powf(ACCELERATION_FACTOR, stepAcceleration);
+//    float intervalDeduction = INITIAL_STEP_INTERVAL * float(stepAcceleration) * ACCELERATION_FACTOR;
+    float newInterval = MAX(INITIAL_STEP_INTERVAL * intervalDeduction, SPEED_MAX);
+    this->stepInterval = newInterval;
+    this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), this->stepInterval);
     
 }
 

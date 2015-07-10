@@ -28,6 +28,7 @@ protected:
     bool active;
     cocos2d::ui::Text* scoreLabel;
     int totalScore;
+    float stepInterval;
 
     // Lifecycle
     bool init() override;
@@ -39,6 +40,7 @@ protected:
     Tetromino* createRandomTetromino();
     void step(float dt);
     void updateStateFromScore();
+    void updateGameSpeed(int score);
 
     // UI
     void updateScoreLabel(int score);
