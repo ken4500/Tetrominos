@@ -28,6 +28,7 @@ bool GameScene::init()
     this->active = false;
     this->totalScore = 0;
     this->stepInterval = INITIAL_STEP_INTERVAL;
+    this->timeLeft = TIME_PER_GAME;
 
     return true;
 }
@@ -48,14 +49,28 @@ void GameScene::onEnter()
     // score label
     auto label = ui::Text::create("SCORE", FONT_NAME, FONT_SIZE);
     label->setColor(Color3B::BLACK);
-    label->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95));
+    label->setAnchorPoint(Vec2(0.5f, 1.0f));
+    label->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.85));
     this->addChild(label);
     
     this->scoreLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
     this->scoreLabel->setColor(LABEL_COLOR);
-    this->setAnchorPoint(Vec2(0.5f, 1.0f));
-    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95 - 60));
+    this->scoreLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.85 - 60));
     this->addChild(this->scoreLabel);
+
+    // time label
+    auto label2 = ui::Text::create("TIME", FONT_NAME, FONT_SIZE);
+    label2->setColor(Color3B::BLACK);
+    label2->setAnchorPoint(Vec2(0.5f, 1.0f));
+    label2->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95));
+    this->addChild(label2);
+    
+    this->timeLeftLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
+    this->timeLeftLabel->setColor(LABEL_COLOR);
+    this->timeLeftLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->timeLeftLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95 - 60));
+    this->addChild(this->timeLeftLabel);
 
     // grid
     this->grid = Grid::create();
@@ -68,7 +83,6 @@ void GameScene::onEnter()
     this->grid->spawnTetromino(randomTest);
     
     this->setupTouchHandler();
-    
     this->setGameActive(true);
 }
 
@@ -148,14 +162,19 @@ void GameScene::setGameActive(bool active)
 {
     if (active) {
         this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), this->stepInterval);
+        this->scheduleUpdate();
     } else {
         this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
-    
+        this->unscheduleUpdate();
     }
 }
 
 void GameScene::step(float dt)
 {
+    if (this->grid->checkIfTopReached()) {
+        this->gameOver();
+    }
+
     Tetromino* activeTetromino = this->grid->getActiveTetromino();
     if (!activeTetromino) {
         Tetromino* newTetromino = this->createRandomTetromino();
@@ -163,6 +182,16 @@ void GameScene::step(float dt)
     } else {
         this->grid->step();
         this->updateStateFromScore();
+    }
+}
+
+void GameScene::update(float dt)
+{
+    Node::update(dt);
+    this->setTimeLeft(this->timeLeft - dt);
+    
+    if (this->timeLeft <= 0.0f) {
+        this->gameOver();
     }
 }
 
@@ -187,6 +216,24 @@ void GameScene::updateGameSpeed(int score)
     this->unschedule(CC_SCHEDULE_SELECTOR(GameScene::step));
     this->schedule(CC_SCHEDULE_SELECTOR(GameScene::step), this->stepInterval);
     
+}
+
+void GameScene::gameOver()
+{
+    this->setGameActive(false);
+    
+    std::string scoreString = StringUtils::toString(totalScore);
+    std::string messageContent = "Your score is " + scoreString + "!";
+    
+    MessageBox(messageContent.c_str(), "Game Over");
+    
+    SceneManager::getInstance()->backLobbyScene();
+}
+
+void GameScene::setTimeLeft(float time)
+{
+    this->timeLeft = time;
+    this->timeLeftLabel->setString(StringUtils::format("%.1f", time));
 }
 
 #pragma mark - UI method

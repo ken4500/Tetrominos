@@ -27,8 +27,10 @@ protected:
     std::unique_ptr<TetrominoBag> tetrominoBag;
     bool active;
     cocos2d::ui::Text* scoreLabel;
+    cocos2d::ui::Text* timeLeftLabel;
     int totalScore;
     float stepInterval;
+    float timeLeft;
 
     // Lifecycle
     bool init() override;
@@ -39,8 +41,11 @@ protected:
     void setGameActive(bool active);
     Tetromino* createRandomTetromino();
     void step(float dt);
+    void update(float dt) override;
     void updateStateFromScore();
     void updateGameSpeed(int score);
+    void gameOver();
+    void setTimeLeft(float time);
 
     // UI
     void updateScoreLabel(int score);

@@ -102,6 +102,18 @@ void Grid::dropActiveTetromino()
     }
 }
 
+bool Grid::checkIfTopReached()
+{
+    for (Sprite* block : blocksLanded.back()) {
+        if (block)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 #pragma mark - Setter/ Getters
 
 void Grid::setActiveTetrominoCoordinate(Coordinate coordinate)
@@ -195,7 +207,9 @@ void Grid::placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoord
         block->removeFromParent();
         this->addChild(block);
         block->release();
-        this->blocksLanded[globalCoordinate.y][globalCoordinate.x] = block;
+        if (globalCoordinate.y < GRID_HEIGHT) {
+            this->blocksLanded[globalCoordinate.y][globalCoordinate.x] = block;
+        }
     }
 }
 
