@@ -8,6 +8,7 @@
 
 #include "Grid.h"
 #include "Tetromino.h"
+#include "UIConstants.h"
 
 using namespace cocos2d;
 
@@ -20,6 +21,9 @@ bool Grid::init() {
     
     this->activeTetromino = nullptr;
     this->activeTetrominoCoordinate = Coordinate();
+    this->score = 0;
+    this->totalLinesCleared = 0;
+
 
     for (int y = 0; y < GRID_HEIGHT; y++) {
         std::vector<Sprite*> row(GRID_WIDTH, nullptr);
@@ -44,6 +48,7 @@ void Grid::rotateActiveTetromino()
             this->activeTetromino->rotate(false);
         } else if (this->ghostTetromino) {
             this->ghostTetromino->rotate(true);
+            this->updateGhostTetrominoPosition();
         }
     }    
 }
@@ -64,7 +69,7 @@ void Grid::spawnTetromino(Tetromino* tetromino)
     // add ghost
     this->ghostTetromino = Tetromino::createWithType(tetromino->getTetrominoType());
     this->ghostTetromino->setCascadeOpacityEnabled(true);
-    this->ghostTetromino->setOpacity(70);
+    this->ghostTetromino->setOpacity(GHOST_TETROMINO_OPACITY);
     this->updateGhostTetrominoPosition();
 
     this->addChild(this->ghostTetromino);
@@ -122,6 +127,16 @@ Size Grid::getBlockSize()
     Size contentSize = this->getContentSize();
     Size blockSize(contentSize.width / float(GRID_WIDTH), contentSize.height / float(GRID_HEIGHT));
     return blockSize;
+}
+
+int Grid::getTotalLinesCleared()
+{
+    return this->totalLinesCleared;
+}
+
+int Grid::getScore()
+{
+    return this->score;
 }
 
 #pragma mark - protected method
@@ -199,6 +214,7 @@ Coordinate Grid::getTetrominoLandingCoordinate()
 
 void Grid::clearLines()
 {
+    int lineCleared = 0;
     for (int y = 0; y < GRID_HEIGHT; y++) {
         auto line = blocksLanded[y];
         bool clearLine = true;
@@ -209,9 +225,12 @@ void Grid::clearLines()
         }
         if (clearLine) {
             this->removeLine(y);
+            lineCleared++;
             y--;
         }
     }
+    this->totalLinesCleared += lineCleared;
+    this->updateScore(lineCleared);
 }
 
 void Grid::removeLine(int removeY)
@@ -238,5 +257,13 @@ void Grid::updateGhostTetrominoPosition()
     if (this->ghostTetromino) {
         Coordinate landingCoordinate = this->getTetrominoLandingCoordinate();
         this->ghostTetromino->setPosition(this->convertCoordinateToPosition(landingCoordinate));
+    }
+}
+
+void Grid::updateScore(int lineCleard)
+{
+    this->score += lineCleard;
+    if (lineCleard == 4) {
+        this->score += 1;
     }
 }

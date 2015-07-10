@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "Grid.h"
 #include "Tetromino.h"
+#include "UIConstants.h"
 
 using namespace cocos2d;
 
@@ -25,6 +26,7 @@ bool GameScene::init()
     this->addChild(background);
     this->tetrominoBag = std::unique_ptr<TetrominoBag>(new TetrominoBag());
     this->active = false;
+    this->totalScore = 0;
 
     return true;
 }
@@ -41,7 +43,19 @@ void GameScene::onEnter()
     backButton->setPosition(Vec2(10, visibleSize.height - 10));
     backButton->addTouchEventListener(CC_CALLBACK_2(GameScene::backButtonPressed, this));
     this->addChild(backButton);
+
+    // score label
+    auto label = ui::Text::create("SCORE", FONT_NAME, FONT_SIZE);
+    label->setColor(Color3B::BLACK);
+    label->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95));
+    this->addChild(label);
     
+    this->scoreLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
+    this->scoreLabel->setColor(LABEL_COLOR);
+    this->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95 - 60));
+    this->addChild(this->scoreLabel);
+
     // grid
     this->grid = Grid::create();
     this->grid->setAnchorPoint(Vec2(0.5f, 0.0f));
@@ -147,7 +161,18 @@ void GameScene::step(float dt)
         this->grid->spawnTetromino(newTetromino);
     } else {
         this->grid->step();
+        this->updateStateFromScore();
     }
+}
+
+void GameScene::updateStateFromScore()
+{
+    int newScore = this->grid->getScore();
+    if (newScore > totalScore) {
+        this->totalScore = newScore;
+        this->updateScoreLabel(newScore);
+    }
+    
 }
 
 #pragma mark - UI method
@@ -156,6 +181,13 @@ void GameScene::backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::To
 {
     SceneManager::getInstance()->backLobbyScene();
 }
+
+void GameScene::updateScoreLabel(int score)
+{
+    std::string scoreString = StringUtils::toString(score);
+    this->scoreLabel->setString(scoreString);
+}
+
 
 #pragma mark - Utility 
 Coordinate GameScene::convertPositionToCoordinate(cocos2d::Vec2 position)

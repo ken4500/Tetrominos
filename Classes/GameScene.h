@@ -26,16 +26,26 @@ protected:
     Grid* grid;
     std::unique_ptr<TetrominoBag> tetrominoBag;
     bool active;
+    cocos2d::ui::Text* scoreLabel;
+    int totalScore;
 
+    // Lifecycle
     bool init() override;
     void onEnter() override;
     void setupTouchHandler();
+
+    // Game Logic
     void setGameActive(bool active);
     Tetromino* createRandomTetromino();
     void step(float dt);
-    void backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType);
-    Coordinate convertPositionToCoordinate(cocos2d::Vec2 position);
+    void updateStateFromScore();
 
+    // UI
+    void updateScoreLabel(int score);
+    void backButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType);
+
+    // Utility
+    Coordinate convertPositionToCoordinate(cocos2d::Vec2 position);
     
 };
 
