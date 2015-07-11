@@ -26,6 +26,7 @@ public:
     std::vector<cocos2d::Sprite*> getBlocks();
     std::vector<Coordinate> getCurrentRotation();
     TetrominoType getTetrominoType();
+    cocos2d::Color3B getTetrominoColor();
 
 private:
     int rotationIndex;

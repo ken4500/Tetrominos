@@ -9,6 +9,7 @@
 #include "Grid.h"
 #include "Tetromino.h"
 #include "UIConstants.h"
+#include "GameScene.h"
 
 using namespace cocos2d;
 
@@ -151,6 +152,12 @@ int Grid::getScore()
     return this->score;
 }
 
+std::vector<std::vector<cocos2d::Sprite*>> Grid::getBlockLanded()
+{
+    return this->blocksLanded;
+}
+
+
 #pragma mark - protected method
 
 Vec2 Grid::convertCoordinateToPosition(Coordinate coordinate)
@@ -189,6 +196,11 @@ void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordin
     this->ghostTetromino->removeFromParent();
     this->ghostTetromino = nullptr;
     this->clearLines();
+    
+    auto gameScene = dynamic_cast<GameScene*>(this->getParent());
+    if (gameScene) {
+        gameScene->step(0);
+    }
 }
 
 void Grid::placeTetrominoOnBoard(Tetromino* tetromino, Coordinate tetrominoCoordinate)

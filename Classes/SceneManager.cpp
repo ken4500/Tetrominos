@@ -24,6 +24,9 @@ SceneManager* SceneManager::getInstance()
 
 SceneManager::SceneManager()
 {
+    gameScene = nullptr;
+    this->networkingWrapper = std::unique_ptr<NetworkingWrapper>(new NetworkingWrapper());
+    this->networkingWrapper->setDelegate(this);
 }
 
 SceneManager::~SceneManager()
@@ -36,12 +39,64 @@ SceneManager::~SceneManager()
 void SceneManager::enterGameScene(bool networked)
 {
     auto scene = Scene::create();
-    auto gameScene = GameScene::create();
-    scene->addChild(gameScene);
+    this->gameScene = GameScene::create();
+    this->gameScene->setNetworkedSession(networked);
+    
+    scene->addChild(this->gameScene);
     Director::getInstance()->pushScene(scene);
 }
 
 void SceneManager::backLobbyScene()
 {
-    Director::getInstance()->popScene();
+    if (gameScene) {
+        Director::getInstance()->popScene();
+        gameScene = nullptr;
+        networkingWrapper->disconnect();
+    }
+}
+
+void SceneManager::showPeerList()
+{
+    networkingWrapper->showPeerList();
+    
+}
+
+void SceneManager::receiveMultiplayerInvitations()
+{
+    networkingWrapper->startAdvertisingAvailability();
+}
+
+void SceneManager::sendData(const void* data, unsigned long length)
+{
+    networkingWrapper->sendData(data, length);
+}
+
+#pragma - Network delegate
+
+void SceneManager::receivedData(const void* data, unsigned long length)
+{
+    if (gameScene) {
+        gameScene->receivedData(data, length);
+    }
+}
+
+void SceneManager::stateChanged(ConnectionState state)
+{
+    switch (state) {
+        case ConnectionState::CONNECTING:
+            CCLOG("Connecting...");
+            break;
+        case ConnectionState::CONNECTED:
+            CCLOG("Connected");
+            if (!gameScene) {
+                this->networkingWrapper->stopAdvertisingAvailability();
+                this->enterGameScene(true);
+            }
+            break;
+        case ConnectionState::NOT_CONNECTED:
+            CCLOG("Not connected");
+            break;
+        default:
+            break;
+    }
 }

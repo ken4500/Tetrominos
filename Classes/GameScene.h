@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "CocosGUI.h"
 #include "TetrominoBag.h"
+#include "PreviewGrid.h"
 #include <time.h>
 class Grid;
 class Tetromino;
@@ -21,6 +22,10 @@ class GameScene : public cocos2d::Node
 {
 public:
     CREATE_FUNC(GameScene);
+    
+    void setNetworkedSession(bool networkedSession);
+    void receivedData(const void* data, unsigned long length);
+    void step(float dt);
 
 protected:
     Grid* grid;
@@ -31,6 +36,9 @@ protected:
     int totalScore;
     float stepInterval;
     float timeLeft;
+    bool networkedSession;
+    bool gameIsOver;
+    PreviewGrid* previewGrid;
 
     // Lifecycle
     bool init() override;
@@ -40,12 +48,14 @@ protected:
     // Game Logic
     void setGameActive(bool active);
     Tetromino* createRandomTetromino();
-    void step(float dt);
     void update(float dt) override;
     void updateStateFromScore();
     void updateGameSpeed(int score);
     void gameOver();
     void setTimeLeft(float time);
+
+    // Networking
+    void sendGameStateOverNetwork();
 
     // UI
     void updateScoreLabel(int score);
