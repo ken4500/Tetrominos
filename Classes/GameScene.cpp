@@ -166,8 +166,9 @@ void GameScene::setupTouchHandler()
                 grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
                 lastTouchPos = touchPos;
             } else if (std::abs(differenseCoordinate.x) >= 1) {
-                bool movingRight = (differenseCoordinate.x > 0);
-                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + ((movingRight) ? 1 : -1), activeTetrominoCoordinate.y);
+//                bool movingRight = (differenseCoordinate.x > 0);
+//                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + ((movingRight) ? 1 : -1), activeTetrominoCoordinate.y);
+                newTetrominoCoordinate = Coordinate(activeTetrominoCoordinate.x + differenseCoordinate.x, activeTetrominoCoordinate.y);
                 this->grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
                 lastTouchPos = touchPos;
                 allowRotate = false;
