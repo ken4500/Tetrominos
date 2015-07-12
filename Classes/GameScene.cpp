@@ -304,6 +304,13 @@ void GameScene::gameOver()
         this->sendGameStateOverNetwork();
     }
     
+    // save high score
+    int highScore = UserDefault::getInstance()->getIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, 0);
+    if (highScore < totalScore) {
+        UserDefault::getInstance()->setIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, totalScore);
+        UserDefault::getInstance()->flush();
+    }
+    
     std::string scoreString = StringUtils::toString(totalScore);
     std::string messageContent = "Your score is " + scoreString + "!";
     

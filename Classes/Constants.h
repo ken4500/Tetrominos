@@ -20,6 +20,8 @@ static const float ACCELERATION_FACTOR = 0.8f;
 static const float SPEED_MAX = 0.1f;
 static const float TIME_PER_GAME = 120.0f;
 
+static const char* USERDEFAULT_KEY_HIGH_SCORE = "2min hightscore";
+
 enum class TetrominoType
 {
     NONE = -1,
