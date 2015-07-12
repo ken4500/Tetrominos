@@ -114,6 +114,14 @@ bool Grid::checkIfTopReached()
     return false;
 }
 
+void Grid::hold(Tetromino* nextTetromino)
+{
+    this->activeTetromino->removeFromParent();
+    this->activeTetromino = nullptr;
+    this->ghostTetromino->removeFromParent();
+    this->ghostTetromino = nullptr;
+    this->spawnTetromino(nextTetromino);
+}
 
 #pragma mark - Setter/ Getters
 

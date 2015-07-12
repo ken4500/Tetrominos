@@ -59,6 +59,7 @@
 		9F08FF251B5072D900128521 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F08FF241B5072D900128521 /* MultipeerConnectivity.framework */; };
 		9F08FF281B508AD300128521 /* PreviewGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F08FF261B508AD300128521 /* PreviewGrid.cpp */; };
 		9F08FF2B1B508D5100128521 /* NextTetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F08FF291B508D5100128521 /* NextTetromino.cpp */; };
+		9F08FF361B523C9400128521 /* HoldTetromino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F08FF341B523C9400128521 /* HoldTetromino.cpp */; };
 		9F425ACA1B448611001B2969 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425AC81B448611001B2969 /* GameScene.cpp */; };
 		9F425ACD1B4498E6001B2969 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ACB1B4498E6001B2969 /* SceneManager.cpp */; };
 		9F425AD01B44A4A1001B2969 /* Grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F425ACE1B44A4A1001B2969 /* Grid.cpp */; };
@@ -168,6 +169,8 @@
 		9F08FF271B508AD300128521 /* PreviewGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewGrid.h; sourceTree = "<group>"; };
 		9F08FF291B508D5100128521 /* NextTetromino.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NextTetromino.cpp; sourceTree = "<group>"; };
 		9F08FF2A1B508D5100128521 /* NextTetromino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NextTetromino.h; sourceTree = "<group>"; };
+		9F08FF341B523C9400128521 /* HoldTetromino.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldTetromino.cpp; sourceTree = "<group>"; };
+		9F08FF351B523C9400128521 /* HoldTetromino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldTetromino.h; sourceTree = "<group>"; };
 		9F425AC61B44832E001B2969 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Constants.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9F425AC81B448611001B2969 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
 		9F425AC91B448611001B2969 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
@@ -419,6 +422,8 @@
 				9F08FF271B508AD300128521 /* PreviewGrid.h */,
 				9F08FF291B508D5100128521 /* NextTetromino.cpp */,
 				9F08FF2A1B508D5100128521 /* NextTetromino.h */,
+				9F08FF341B523C9400128521 /* HoldTetromino.cpp */,
+				9F08FF351B523C9400128521 /* HoldTetromino.h */,
 			);
 			name = "Game Sprite";
 			sourceTree = "<group>";
@@ -576,6 +581,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F08FF361B523C9400128521 /* HoldTetromino.cpp in Sources */,
 				9F425AD01B44A4A1001B2969 /* Grid.cpp in Sources */,
 				9F08FF1D1B5067D800128521 /* NetworkingWrapper.mm in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,

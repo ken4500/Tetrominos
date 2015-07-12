@@ -13,10 +13,12 @@
 #include "CocosGUI.h"
 #include "TetrominoBag.h"
 #include "PreviewGrid.h"
+#include "HoldTetromino.h"
 #include <time.h>
 class Grid;
 class Tetromino;
 class Coordinate;
+class NextTetromino;
 
 class GameScene : public cocos2d::Node
 {
@@ -39,6 +41,8 @@ protected:
     bool networkedSession;
     bool gameIsOver;
     PreviewGrid* previewGrid;
+    HoldTetromino* holdTetromino;
+    NextTetromino* nextTetromino;
 
     // Lifecycle
     bool init() override;
@@ -53,6 +57,7 @@ protected:
     void updateGameSpeed(int score);
     void gameOver();
     void setTimeLeft(float time);
+    void hold();
 
     // Networking
     void sendGameStateOverNetwork();

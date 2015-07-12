@@ -13,6 +13,7 @@
 #include "UIConstants.h"
 #include "NetworkingWrapper.h"
 #include "JSONPacker.h"
+#include "NextTetromino.h"
 
 using namespace cocos2d;
 
@@ -74,12 +75,26 @@ void GameScene::onEnter()
     this->timeLeftLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
     this->timeLeftLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95 - 60));
     this->addChild(this->timeLeftLabel);
-
+    
     // grid
     this->grid = Grid::create();
     this->grid->setAnchorPoint(Vec2(0.5f, 0.0f));
     this->grid->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.0f));
     this->addChild(this->grid);
+
+    // next view
+    this->nextTetromino = NextTetromino::create();
+    this->nextTetromino->setAnchorPoint(Vec2(0.0f, 0.0f));
+    this->nextTetromino->setPosition(Vec2(visibleSize.width - 250, this->grid->getContentSize().height));
+    auto type = this->tetrominoBag->getTetromino();
+    this->nextTetromino->setTetromino(type);
+    this->addChild(this->nextTetromino);
+    
+    // next view
+    this->holdTetromino = HoldTetromino::create();
+    this->holdTetromino->setAnchorPoint(Vec2(0.0f, 0.0f));
+    this->holdTetromino->setPosition(Vec2(150, this->grid->getContentSize().height));
+    this->addChild(this->holdTetromino);
     
     if (this->networkedSession) {
         this->grid->setAnchorPoint(Vec2(0.0f, 0.0f));
@@ -167,13 +182,15 @@ void GameScene::setupTouchHandler()
         if (distance < 40.0f && allowRotate) {
             this->grid->rotateActiveTetromino();
         } else {
-            Vec2 difference = touchEndPos - firstTouchPos;
+            Vec2 difference = firstTouchPos - touchEndPos;
             float touchDuration = (float)(clock() - touchStartedTime) / CLOCKS_PER_SEC;
-            float velocity = fabsf(difference.y / touchDuration);
+            float velocity = difference.y / touchDuration;
             CCLOG("velocity = %f", velocity);
             if (velocity > DROP_VELOCITY) {
                 this->grid->dropActiveTetromino();
                 this->step(0);
+            } else if (velocity < HOLD_VELOCITY) {
+                this->hold();
             }
         }
     };
@@ -208,7 +225,9 @@ void GameScene::receivedData(const void* data, unsigned long length)
 Tetromino* GameScene::createRandomTetromino()
 {
     auto type = this->tetrominoBag->getTetromino();
-    return Tetromino::createWithType(type);
+    auto nextType = this->nextTetromino->getTetromino();
+    this->nextTetromino->setTetromino(type);
+    return Tetromino::createWithType(nextType);
 }
 
 void GameScene::setGameActive(bool active)
@@ -296,6 +315,19 @@ void GameScene::setTimeLeft(float time)
 {
     this->timeLeft = time;
     this->timeLeftLabel->setString(StringUtils::format("%.1f", time));
+}
+
+void GameScene::hold()
+{
+    auto currentType = this->grid->getActiveTetromino()->getTetrominoType();
+    auto popType = this->holdTetromino->holdTetromino(currentType);
+    Tetromino* nextTetromino;
+    if (popType == TetrominoType::NONE) {
+        nextTetromino = this->createRandomTetromino();
+    } else {
+        nextTetromino = Tetromino::createWithType(popType);
+    }
+    this->grid->hold(nextTetromino);
 }
 
 #pragma - Network

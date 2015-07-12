@@ -11,7 +11,9 @@
 
 #include "Cocos2d.h"
 #include "Constants.h"
+#include "UIConstants.h"
 #include "Tetromino.h"
+#include "CocosGUI.h"
 
 class NextTetromino : public cocos2d::LayerColor
 {

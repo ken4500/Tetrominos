@@ -18,6 +18,7 @@ public:
     CREATE_FUNC(Grid);
     void rotateActiveTetromino();
     void spawnTetromino(Tetromino* tetromino);
+    void hold(Tetromino* nextTetromino);
     void step();
     
     void setActiveTetrominoCoordinate(Coordinate coordinate);

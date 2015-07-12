@@ -1,22 +1,23 @@
 //
-//  NextTetromino.cpp
+//  HoldTetromino.cpp
 //  Tetrominos
 //
-//  Created by Ken Watanabe on 2015/07/10.
+//  Created by Ken Watanabe on 2015/07/11.
 //
 //
 
-#include "NextTetromino.h"
+#include "HoldTetromino.h"
+
 using namespace cocos2d;
 
-bool NextTetromino::init()
+bool HoldTetromino::init()
 {
     if (!LayerColor::initWithColor(Color4B::GRAY, 100, 100)) {
         return false;
     }
     
     this->displayTetromino = nullptr;
-    auto label3 = ui::Text::create("NEXT", FONT_NAME, 24);
+    auto label3 = ui::Text::create("HOLD", FONT_NAME, 24);
     label3->setColor(Color3B::BLACK);
     label3->setAnchorPoint(Vec2(0.5f, 0.0f));
     label3->setPosition(Vec2(this->getContentSize().width /2, this->getContentSize().height));
@@ -25,8 +26,12 @@ bool NextTetromino::init()
     return true;
 }
 
-void NextTetromino::setTetromino(TetrominoType type)
+TetrominoType HoldTetromino::holdTetromino(TetrominoType type)
 {
+    TetrominoType rtnValue = TetrominoType::NONE;
+    if (this->displayTetromino) {
+        rtnValue = this->displayTetromino->getTetrominoType();
+    }
     auto pre = this->getChildByName("tetromino");
     if (pre) {
         pre->removeFromParent();
@@ -37,9 +42,7 @@ void NextTetromino::setTetromino(TetrominoType type)
     next->setScale(0.5f);
     next->setPosition(Vec2(10, 10));
     addChild(next);
+    
+    return rtnValue;
 }
 
-TetrominoType NextTetromino::getTetromino()
-{
-    return this->displayTetromino->getTetrominoType();
-}
