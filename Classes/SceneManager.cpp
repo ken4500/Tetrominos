@@ -8,6 +8,7 @@
 
 #include "SceneManager.h"
 #include "GameScene.h"
+#include "SoundManager.h"
 using namespace cocos2d;
 
 #pragma mark -
@@ -44,6 +45,9 @@ void SceneManager::enterGameScene(bool networked)
     
     scene->addChild(this->gameScene);
     Director::getInstance()->pushScene(scene);
+    if (networked) {
+        SoundManager::getInstance()->playGameBgm();
+    }
 }
 
 void SceneManager::backLobbyScene()
@@ -52,6 +56,7 @@ void SceneManager::backLobbyScene()
         Director::getInstance()->popScene();
         gameScene = nullptr;
         networkingWrapper->disconnect();
+        SoundManager::getInstance()->stopBgm();
     }
 }
 

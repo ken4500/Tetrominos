@@ -15,17 +15,19 @@
 #include "Tetromino.h"
 #include "CocosGUI.h"
 
-class NextTetromino : public cocos2d::LayerColor
+class NextTetromino : public cocos2d::Node
 {
 public:
     CREATE_FUNC(NextTetromino);
+    void initTetromino(TetrominoType type1, TetrominoType type2, TetrominoType type3);
     void setTetromino(TetrominoType type);
     TetrominoType getTetromino();
 
 private:
-    Tetromino* displayTetromino;
+    std::vector<cocos2d::Layer*> box;
 
     bool init() override;
+    Tetromino* createTetromino(TetrominoType type);
     
 };
 

@@ -10,6 +10,7 @@
 #include "Tetromino.h"
 #include "UIConstants.h"
 #include "GameScene.h"
+#include "SoundManager.h"
 
 using namespace cocos2d;
 
@@ -48,6 +49,7 @@ void Grid::rotateActiveTetromino()
         if (this->checkIfTetrominoCollide(this->activeTetromino, this->activeTetrominoCoordinate)) {
             this->activeTetromino->rotate(false);
         } else if (this->ghostTetromino) {
+            SoundManager::getInstance()->playRotateEffect();
             this->ghostTetromino->rotate(true);
             this->updateGhostTetrominoPosition();
         }
@@ -198,6 +200,7 @@ bool Grid::checkIfTetrominoCollide(Tetromino* tetromino, Coordinate tetrominoCoo
 
 void Grid::deactivateTetromino(Tetromino* tetromino, Coordinate tetrominoCoordinate)
 {
+    SoundManager::getInstance()->playLandEffect();
     this->placeTetrominoOnBoard(tetromino, tetrominoCoordinate);
     this->activeTetromino->removeFromParent();
     this->activeTetromino = nullptr;
@@ -265,6 +268,9 @@ void Grid::clearLines()
     }
     this->totalLinesCleared += lineCleared;
     this->updateScore(lineCleared);
+    if (lineCleared > 0) {
+        SoundManager::getInstance()->playClearLineEffect(lineCleared);
+    }
 }
 
 void Grid::removeLine(int removeY)

@@ -14,6 +14,7 @@
 #include "NetworkingWrapper.h"
 #include "JSONPacker.h"
 #include "NextTetromino.h"
+#include "SoundManager.h"
 
 using namespace cocos2d;
 
@@ -85,15 +86,17 @@ void GameScene::onEnter()
     // next view
     this->nextTetromino = NextTetromino::create();
     this->nextTetromino->setAnchorPoint(Vec2(0.0f, 0.0f));
-    this->nextTetromino->setPosition(Vec2(visibleSize.width - 250, this->grid->getContentSize().height));
-    auto type = this->tetrominoBag->getTetromino();
-    this->nextTetromino->setTetromino(type);
+    this->nextTetromino->setPosition(Vec2(visibleSize.width - 70, this->grid->getContentSize().height));
+    auto type1 = this->tetrominoBag->getTetromino();
+    auto type2 = this->tetrominoBag->getTetromino();
+    auto type3 = this->tetrominoBag->getTetromino();
+    this->nextTetromino->initTetromino(type1, type2, type3);
     this->addChild(this->nextTetromino);
     
-    // next view
+    // hold view
     this->holdTetromino = HoldTetromino::create();
     this->holdTetromino->setAnchorPoint(Vec2(0.0f, 0.0f));
-    this->holdTetromino->setPosition(Vec2(150, this->grid->getContentSize().height));
+    this->holdTetromino->setPosition(Vec2(20, this->grid->getContentSize().height - 100));
     this->addChild(this->holdTetromino);
     
     if (this->networkedSession) {
@@ -172,6 +175,7 @@ void GameScene::setupTouchHandler()
                 this->grid->setActiveTetrominoCoordinate(newTetrominoCoordinate);
                 lastTouchPos = touchPos;
                 allowRotate = false;
+                SoundManager::getInstance()->playMoveEffect();
             }
         }
     };
@@ -182,6 +186,7 @@ void GameScene::setupTouchHandler()
         float distance = touchEndPos.distance(firstTouchPos);
         if (distance < 40.0f && allowRotate) {
             this->grid->rotateActiveTetromino();
+            
         } else {
             Vec2 difference = firstTouchPos - touchEndPos;
             float touchDuration = (float)(clock() - touchStartedTime) / CLOCKS_PER_SEC;
@@ -189,9 +194,12 @@ void GameScene::setupTouchHandler()
             CCLOG("velocity = %f", velocity);
             if (velocity > DROP_VELOCITY) {
                 this->grid->dropActiveTetromino();
+                SoundManager::getInstance()->playDropEffect();
+
                 this->step(0);
             } else if (velocity < HOLD_VELOCITY) {
                 this->hold();
+                SoundManager::getInstance()->playHoldEffect();
             }
         }
     };
