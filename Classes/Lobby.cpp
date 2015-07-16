@@ -46,6 +46,12 @@ void Lobby::setupUI()
     auto logo = Sprite::create("logo.png");
     logo->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.75f));
     this->addChild(logo);
+
+    auto line40Button = ui::Button::create();
+    line40Button->loadTextures("40lineButton.png", "40lineButtonPressed.png");
+    line40Button->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.55f));
+    line40Button->addTouchEventListener(CC_CALLBACK_2(Lobby::line40ButtonPressed, this));
+    this->addChild(line40Button);
     
     auto singleButton = ui::Button::create();
     singleButton->loadTextures("singlePlayerButton.png", "singlePlayerButtonPressed.png");
@@ -59,20 +65,48 @@ void Lobby::setupUI()
     multiButton->addTouchEventListener(CC_CALLBACK_2(Lobby::multiPlayerButtonPressed, this));
     this->addChild(multiButton);
     
-    auto highSocre = UserDefault::getInstance()->getIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, 0);
-    if (true || highSocre > 0) {
-        auto highScoreStr = StringUtils::format("high score: %d", highSocre);
-        auto highScoreLabel = ui::Text::create(highScoreStr, FONT_NAME, FONT_SIZE);
-        highScoreLabel->setColor(Color3B::BLACK);
-        highScoreLabel->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.1f));
-        this->addChild(highScoreLabel);
+    auto timeHighSocre = UserDefault::getInstance()->getFloatForKey(USERDEFAULT_KEY_TIME_HIGH_SCORE, 9999);
+    auto lineHighSocre = UserDefault::getInstance()->getIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, 0);
+
+    auto timeHighScoreLabel = ui::Text::create("40line:", FONT_NAME, FONT_SIZE);
+    timeHighScoreLabel->setAnchorPoint(Vec2(1.0f, 0));
+    timeHighScoreLabel->setColor(Color3B::BLACK);
+    timeHighScoreLabel->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.1f));
+    this->addChild(timeHighScoreLabel);
+
+    auto timeHighScoreStr = StringUtils::format("  %.1f", timeHighSocre);
+    auto timeHighScoreLabel2 = ui::Text::create(timeHighScoreStr, FONT_NAME, FONT_SIZE);
+    timeHighScoreLabel2->setAnchorPoint(Vec2(0.0f, 0));
+    timeHighScoreLabel2->setColor(Color3B(162, 63, 63));
+    timeHighScoreLabel2->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.1f));
+    this->addChild(timeHighScoreLabel2);
+
+    auto highScoreLabel = ui::Text::create("2min:", FONT_NAME, FONT_SIZE);
+    highScoreLabel->setAnchorPoint(Vec2(1.0f, 1.0f));
+    highScoreLabel->setColor(Color3B::BLACK);
+    highScoreLabel->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.1f));
+    this->addChild(highScoreLabel);
+
+    auto highScoreLabel2 = ui::Text::create(StringUtils::format("  %d", lineHighSocre), FONT_NAME, FONT_SIZE);
+    highScoreLabel2->setAnchorPoint(Vec2(0.0f, 1.0f));
+    highScoreLabel2->setColor(Color3B(162, 63, 63));
+    highScoreLabel2->setPosition(Vec2(displaySize.width * 0.5f, displaySize.height * 0.1f));
+    this->addChild(highScoreLabel2);
+
+
+}
+
+void Lobby::line40ButtonPressed(cocos2d::Ref* pSender, cocos2d::ui::Widget::TouchEventType eEventType)
+{
+    if (eEventType == ui::Widget::TouchEventType::ENDED) {
+        SceneManager::getInstance()->enterGameScene(false, GameMode::LINE40_MODE);
     }
 }
 
 void Lobby::singlePlayerButtonPressed(cocos2d::Ref* pSender, ui::Widget::TouchEventType eEventType)
 {
     if (eEventType == ui::Widget::TouchEventType::ENDED) {
-        SceneManager::getInstance()->enterGameScene(false);
+        SceneManager::getInstance()->enterGameScene(false, GameMode::MIN2_MODE);
     }
 }
 

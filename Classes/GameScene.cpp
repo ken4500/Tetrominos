@@ -20,7 +20,21 @@ using namespace cocos2d;
 
 #pragma mark - lifecycle
 
-bool GameScene::init()
+GameScene* GameScene::create(GameMode mode)
+{
+    GameScene* gameScene = new(std::nothrow) GameScene();
+    if (gameScene && gameScene->init(mode))
+    {
+        gameScene->autorelease();
+        return gameScene;
+    }
+    
+    CC_SAFE_DELETE(gameScene);
+    return nullptr;
+}
+
+
+bool GameScene::init(GameMode mode)
 {
     if (! Node::init()) {
         return false;
@@ -31,9 +45,15 @@ bool GameScene::init()
     this->tetrominoBag = std::unique_ptr<TetrominoBag>(new TetrominoBag());
     this->active = false;
     this->totalScore = 0;
+    this->leftLine = LINE_PER_GAME;
     this->stepInterval = INITIAL_STEP_INTERVAL;
-    this->timeLeft = TIME_PER_GAME;
+    if (mode == GameMode::MIN2_MODE) {
+        this->timeLeft = TIME_PER_GAME;
+    } else {
+        this->timeLeft = 0;
+    }
     this->gameIsOver = false;
+    this->gameMode = mode;
 
     return true;
 }
@@ -50,38 +70,46 @@ void GameScene::onEnter()
     backButton->setPosition(Vec2(10, visibleSize.height - 10));
     backButton->addTouchEventListener(CC_CALLBACK_2(GameScene::backButtonPressed, this));
     this->addChild(backButton);
-
-    // score label
-    auto label = ui::Text::create("SCORE", FONT_NAME, FONT_SIZE);
-    label->setColor(Color3B::BLACK);
-    label->setAnchorPoint(Vec2(0.5f, 1.0f));
-    label->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.85));
-    this->addChild(label);
-    
-    this->scoreLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
-    this->scoreLabel->setColor(LABEL_COLOR);
-    this->scoreLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
-    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.85 - 60));
-    this->addChild(this->scoreLabel);
-
-    // time label
-    auto label2 = ui::Text::create("TIME", FONT_NAME, FONT_SIZE);
-    label2->setColor(Color3B::BLACK);
-    label2->setAnchorPoint(Vec2(0.5f, 1.0f));
-    label2->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95));
-    this->addChild(label2);
-    
-    this->timeLeftLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
-    this->timeLeftLabel->setColor(LABEL_COLOR);
-    this->timeLeftLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
-    this->timeLeftLabel->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.95 - 60));
-    this->addChild(this->timeLeftLabel);
     
     // grid
     this->grid = Grid::create();
     this->grid->setAnchorPoint(Vec2(0.5f, 0.0f));
     this->grid->setPosition(Vec2(visibleSize.width * 0.5f, visibleSize.height * 0.0f));
     this->addChild(this->grid);
+
+    // score label
+    auto label = ui::Text::create("", FONT_NAME, FONT_SIZE);
+    label->setColor(Color3B::BLACK);
+    label->setAnchorPoint(Vec2(0.5f, 1.0f));
+    label->setPosition(Vec2(visibleSize.width * 0.5f, grid->getContentSize().height + 150));
+    this->addChild(label);
+    
+    this->scoreLabel = ui::Text::create("", FONT_NAME, FONT_SIZE);
+    this->scoreLabel->setColor(LABEL_COLOR);
+    this->scoreLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->scoreLabel->setPosition(Vec2(visibleSize.width * 0.5f, grid->getContentSize().height + 80));
+    this->addChild(this->scoreLabel);
+
+    if (this->gameMode == GameMode::MIN2_MODE) {
+        label->setString("SCORE");
+        this->scoreLabel->setString("0");
+    } else {
+        label->setString("LEFT");
+        this->scoreLabel->setString(std::to_string(LINE_PER_GAME));
+    }
+
+    // time label
+    auto label2 = ui::Text::create("TIME", FONT_NAME, FONT_SIZE);
+    label2->setColor(Color3B::BLACK);
+    label2->setAnchorPoint(Vec2(0.5f, 1.0f));
+    label2->setPosition(Vec2(visibleSize.width * 0.5f, grid->getContentSize().height + 290));
+    this->addChild(label2);
+    
+    this->timeLeftLabel = ui::Text::create("0", FONT_NAME, FONT_SIZE);
+    this->timeLeftLabel->setColor(LABEL_COLOR);
+    this->timeLeftLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+    this->timeLeftLabel->setPosition(Vec2(visibleSize.width * 0.5f, grid->getContentSize().height + 220));
+    this->addChild(this->timeLeftLabel);
 
     // next view
     this->nextTetromino = NextTetromino::create();
@@ -273,9 +301,13 @@ void GameScene::step(float dt)
 void GameScene::update(float dt)
 {
     Node::update(dt);
-    this->setTimeLeft(this->timeLeft - dt);
+    if (this->gameMode == GameMode::MIN2_MODE) {
+        this->setTimeLeft(this->timeLeft - dt);
+    } else if (this->gameMode == GameMode::LINE40_MODE) {
+        this->setTimeLeft(this->timeLeft + dt);
+    }
     
-    if (this->timeLeft <= 0.0f) {
+    if (this->timeLeft < 0.0f) {
         this->gameOver();
     }
 }
@@ -283,10 +315,23 @@ void GameScene::update(float dt)
 void GameScene::updateStateFromScore()
 {
     int newScore = this->grid->getScore();
-    if (newScore > totalScore) {
-        this->totalScore = newScore;
-        this->updateScoreLabel(newScore);
-        this->updateGameSpeed(newScore);
+    if (this->gameMode == GameMode::MIN2_MODE) {
+        if (newScore > totalScore) {
+            this->totalScore = newScore;
+            this->updateScoreLabel(newScore);
+            this->updateGameSpeed(newScore);
+        }
+    } else {
+        int clearLine = this->grid->getTotalLinesCleared();
+        int newLeftLine = MAX(LINE_PER_GAME - clearLine, 0);
+        if (newLeftLine < leftLine) {
+            this->leftLine = newLeftLine;
+            this->updateScoreLabel(newLeftLine);
+            this->updateGameSpeed(newScore);
+        }
+        if (newLeftLine == 0) {
+            this->gameOver();
+        }
     }
     
 }
@@ -312,17 +357,30 @@ void GameScene::gameOver()
         this->sendGameStateOverNetwork();
     }
     
-    // save high score
-    int highScore = UserDefault::getInstance()->getIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, 0);
-    if (highScore < totalScore) {
-        UserDefault::getInstance()->setIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, totalScore);
-        UserDefault::getInstance()->flush();
+    if (this->gameMode == GameMode::MIN2_MODE) {
+        // save high score
+        int highScore = UserDefault::getInstance()->getIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, 0);
+        if (highScore < totalScore) {
+            UserDefault::getInstance()->setIntegerForKey(USERDEFAULT_KEY_HIGH_SCORE, totalScore);
+            UserDefault::getInstance()->flush();
+        }
+
+        MessageBox(StringUtils::format("Your score is %d", totalScore).c_str(), "Game Over");
+
+    } else {
+        if (this->leftLine == 0) {
+            // save high score
+            int highScore = UserDefault::getInstance()->getFloatForKey(USERDEFAULT_KEY_TIME_HIGH_SCORE, 9999);
+            if (highScore > timeLeft) {
+                UserDefault::getInstance()->setFloatForKey(USERDEFAULT_KEY_TIME_HIGH_SCORE, timeLeft);
+                UserDefault::getInstance()->flush();
+            }
+        
+            MessageBox(StringUtils::format("Your score is %.1f", timeLeft).c_str(), "Game Cler");
+        } else {
+            MessageBox("Your score is nothing", "Game Over");
+        }
     }
-    
-    std::string scoreString = StringUtils::toString(totalScore);
-    std::string messageContent = "Your score is " + scoreString + "!";
-    
-    MessageBox(messageContent.c_str(), "Game Over");
     
     SceneManager::getInstance()->backLobbyScene();
 }
@@ -331,6 +389,9 @@ void GameScene::setTimeLeft(float time)
 {
     this->timeLeft = time;
     this->timeLeftLabel->setString(StringUtils::format("%.1f", time));
+    if (this->gameMode == GameMode::MIN2_MODE && time < 10) {
+        this->timeLeftLabel->setColor(Color3B::RED);
+    }
 }
 
 void GameScene::hold()

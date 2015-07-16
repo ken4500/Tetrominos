@@ -37,10 +37,10 @@ SceneManager::~SceneManager()
 #pragma mark -
 #pragma mark Public Methods
 
-void SceneManager::enterGameScene(bool networked)
+void SceneManager::enterGameScene(bool networked, GameMode mode)
 {
     auto scene = Scene::create();
-    this->gameScene = GameScene::create();
+    this->gameScene = GameScene::create(mode);
     this->gameScene->setNetworkedSession(networked);
     
     scene->addChild(this->gameScene);
@@ -95,7 +95,7 @@ void SceneManager::stateChanged(ConnectionState state)
             CCLOG("Connected");
             if (!gameScene) {
                 this->networkingWrapper->stopAdvertisingAvailability();
-                this->enterGameScene(true);
+                this->enterGameScene(true, GameMode::MIN2_MODE);
             }
             break;
         case ConnectionState::NOT_CONNECTED:

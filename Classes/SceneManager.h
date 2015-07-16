@@ -10,13 +10,14 @@
 #define __Tetrominos__SceneManager__
 
 #include "NetworkingWrapper.h"
+#include "Constants.h"
 
 class GameScene;
 
 class SceneManager : NetworkingDelegate {
 public:
     static SceneManager* getInstance();
-    void enterGameScene(bool networked);
+    void enterGameScene(bool networked, GameMode mode);
     void backLobbyScene();
     void showPeerList();
     void receiveMultiplayerInvitations();

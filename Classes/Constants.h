@@ -19,8 +19,10 @@ static const int SCORE_TO_ACCELERATE = 5;
 static const float ACCELERATION_FACTOR = 0.8f;
 static const float SPEED_MAX = 0.1f;
 static const float TIME_PER_GAME = 120.0f;
+static const int LINE_PER_GAME = 40;
 
 static const char* USERDEFAULT_KEY_HIGH_SCORE = "2min hightscore";
+static const char* USERDEFAULT_KEY_TIME_HIGH_SCORE = "40line hightscore";
 
 enum class TetrominoType
 {
@@ -32,6 +34,12 @@ enum class TetrominoType
     Z = 4,
     J = 5,
     L = 6
+};
+
+enum class GameMode
+{
+    LINE40_MODE,
+    MIN2_MODE
 };
 
 #endif

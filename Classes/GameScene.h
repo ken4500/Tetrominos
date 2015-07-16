@@ -23,7 +23,7 @@ class NextTetromino;
 class GameScene : public cocos2d::Node
 {
 public:
-    CREATE_FUNC(GameScene);
+    static GameScene* create(GameMode mode);
     
     void setNetworkedSession(bool networkedSession);
     void receivedData(const void* data, unsigned long length);
@@ -36,6 +36,7 @@ protected:
     cocos2d::ui::Text* scoreLabel;
     cocos2d::ui::Text* timeLeftLabel;
     int totalScore;
+    int leftLine;
     float stepInterval;
     float timeLeft;
     bool networkedSession;
@@ -43,9 +44,10 @@ protected:
     PreviewGrid* previewGrid;
     HoldTetromino* holdTetromino;
     NextTetromino* nextTetromino;
+    GameMode gameMode;
 
     // Lifecycle
-    bool init() override;
+    bool init(GameMode);
     void onEnter() override;
     void setupTouchHandler();
 
